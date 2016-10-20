@@ -1,0 +1,2 @@
+nmake helloworld.mak
+nmake /f helloworld.mak clean
