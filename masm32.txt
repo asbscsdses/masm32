@@ -1,0 +1,2 @@
+ml /c /coff /Cp Test.asm
+link /subsystem:windows xx.obj yy.lib zz.res
