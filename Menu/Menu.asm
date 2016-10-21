@@ -8,8 +8,10 @@ includelib	user32.lib
 include		kernel32.inc
 includelib	kernel32.lib
 
+
 IDR_MENU1          equ        101
 IDR_ACCELERATOR1   equ        102
+IDI_ICON1          equ        103
 IDM_OPEN           equ        40004
 IDM_OPTION         equ        40005
 IDM_EXIT           equ        40006
@@ -39,7 +41,7 @@ szCaptionMain	db		'Menu',0
 szMenuHelp		db		'帮助主题(&H)',0
 szMenuAbout		db		'关于本程序(&A)...',0
 szCaption		db		'菜单选择',0
-szFormat		db		'您选择了菜单命令: %08x',08x
+szFormat		db		'您选择了菜单命令: %08x',0
 
 				.code
 _DisplayMenuItem 		proc 		_dwCommandId
@@ -127,13 +129,49 @@ _WinMain				proc
 						
 						invoke	GetModuleHandle,NULL
 						mov		hInstance,eax
-						invoke	LoadMenu,hInstance,IDM_MAIN
+						invoke	LoadMenu,hInstance,IDR_MENU1
 						mov		@hAccelerator,eax
 						
 						;注册窗口类
 						invoke	RtlZeroMemory,addr @stWndClass,sizeof @stWndClass
-						invoke	LoadIcon,hInstance,ICO_MAIN
+						invoke	LoadIcon,hInstance,IDI_ICON1
 						mov		@stWndClass.hIcon,eax
 						mov		@stWndClass.hIconSm,eax
 						push	hInstance
-						pop		
+						pop		@stWndClass.hInstance
+						mov		@stWndClass.cbSize,sizeof WNDCLASSEX
+						mov		@stWndClass.style,CS_HREDRAW or CS_VREDRAW
+						mov		@stWndClass.lpfnWndProc,offset _ProcWinMain
+						mov		@stWndClass.hbrBackground,COLOR_WINDOW+1
+						mov		@stWndClass.lpszClassName,offset szClassName
+						invoke	RegisterClassEx,addr @stWndClass
+						
+						;建立并显示窗口
+						invoke  CreateWindowEx,WS_EX_CLIENTEDGE,\
+									offset szClassName,offset szCaptionMain,\
+									WS_OVERLAPPEDWINDOW,\
+									100,100,400,300,\
+									NULL,hMenu,hInstance,NULL
+						mov 	hWinMain,eax
+						invoke	ShowWindow,hWinMain,SW_SHOWNORMAL
+						invoke	UpdateWindow,hWinMain
+						
+						;消息循环
+						.while	TRUE
+								invoke	GetMessage,addr @stMSG,NULL,0,0
+								.break	.if	eax == 0
+								invoke	TranslateAccelerator,hWinMain,\
+											@hAccelerator,addr @stMSG
+								.if		eax == 0
+										invoke	TranslateMessage,addr @stMSG
+										invoke	DispatchMessage,addr @stMSG
+								.endif
+						.endw
+						
+_WinMain				endp
+
+start:
+						call	_WinMain
+						invoke	ExitProcess,NULL
+						
+						end		start
