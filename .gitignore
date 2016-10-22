@@ -2,3 +2,7 @@
 HelloWorld/helloworld.obj
 *.opendb
 Menu/Project1/Project1/Project1.vcxproj.user
+*.suo
+*.suo
+*.suo
+Menu/Project1/.vs/Project1/v14/.suo
