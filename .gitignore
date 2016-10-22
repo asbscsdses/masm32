@@ -1,2 +1,4 @@
 *.exe
 HelloWorld/helloworld.obj
+*.opendb
+Menu/Project1/Project1/Project1.vcxproj.user
