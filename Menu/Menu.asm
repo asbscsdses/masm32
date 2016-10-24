@@ -68,7 +68,7 @@ _ProcWinMain			proc		uses ebx edi esi hWnd,uMsg,wParam,lParam
 				mov		eax,uMsg
 				.if		eax == WM_CREATE
 						invoke GetSubMenu,hMenu,1
-						MOV		hSubMenu,eax
+						mov		hSubMenu,eax
 						;在系统菜单中添加菜单项
 						invoke	GetSystemMenu,hWnd,FALSE
 						mov		@hSysMenu,eax
@@ -130,6 +130,8 @@ _WinMain				proc
 						invoke	GetModuleHandle,NULL
 						mov		hInstance,eax
 						invoke	LoadMenu,hInstance,IDR_MENU1
+						mov		hMenu,eax
+						invoke	LoadAccelerators,hInstance,IDR_ACCELERATOR1
 						mov		@hAccelerator,eax
 						
 						;注册窗口类
@@ -167,6 +169,7 @@ _WinMain				proc
 										invoke	DispatchMessage,addr @stMSG
 								.endif
 						.endw
+						ret
 						
 _WinMain				endp
 
