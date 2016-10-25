@@ -38,10 +38,10 @@ hSubMenu		dd		?
 				.const
 szClassName		db		'Menu Example',0
 szCaptionMain	db		'Menu',0
-szMenuHelp		db		'å¸®åŠ©ä¸»é¢˜(&H)',0
-szMenuAbout		db		'å…³äºæœ¬ç¨‹åº(&A)...',0
-szCaption		db		'èœå•é€‰æ‹©',0
-szFormat		db		'æ‚¨é€‰æ‹©äº†èœå•å‘½ä»¤: %08x',0
+szMenuHelp		db		'°ïÖúÖ÷Ìâ(&H)',0
+szMenuAbout		db		'¹ØÓÚ±¾³ÌĞò(&A)...',0
+szCaption		db		'²Ëµ¥Ñ¡Ôñ',0
+szFormat		db		'ÄúÑ¡ÔñÁË²Ëµ¥ÃüÁî: %08x',0
 
 				.code
 _DisplayMenuItem 		proc 		_dwCommandId
@@ -69,7 +69,7 @@ _ProcWinMain			proc		uses ebx edi esi hWnd,uMsg,wParam,lParam
 				.if		eax == WM_CREATE
 						invoke GetSubMenu,hMenu,1
 						mov		hSubMenu,eax
-						;åœ¨ç³»ç»Ÿèœå•ä¸­æ·»åŠ èœå•é¡¹
+						;ÔÚÏµÍ³²Ëµ¥ÖĞÌí¼Ó²Ëµ¥Ïî
 						invoke	GetSystemMenu,hWnd,FALSE
 						mov		@hSysMenu,eax
 						invoke	AppendMenu,@hSysMenu,MF_SEPARATOR,0,NULL
@@ -77,7 +77,7 @@ _ProcWinMain			proc		uses ebx edi esi hWnd,uMsg,wParam,lParam
 									0,IDM_HELP,offset szMenuHelp
 						invoke	AppendMenu,@hSysMenu,\
 									0,IDM_ABOUT,offset szMenuAbout
-						;å¤„ç†èœå•åŠåŠ é€Ÿé”®æ¶ˆæ¯
+						;´¦Àí²Ëµ¥¼°¼ÓËÙ¼üÏûÏ¢
 				.elseif	eax == WM_COMMAND
 						invoke	_DisplayMenuItem,wParam
 						mov		eax,wParam
@@ -97,7 +97,7 @@ _ProcWinMain			proc		uses ebx edi esi hWnd,uMsg,wParam,lParam
 								invoke	CheckMenuRadioItem,hMenu,IDM_BIG,\
 											IDM_DETAIL,eax,MF_BYCOMMAND
 						.endif
-						;å¤„ç†ç³»ç»Ÿèœå•æ¶ˆæ¯
+						;´¦ÀíÏµÍ³²Ëµ¥ÏûÏ¢
 				.elseif	eax == WM_SYSCOMMAND
 						mov		eax,wParam
 						movzx	eax,ax
@@ -107,7 +107,7 @@ _ProcWinMain			proc		uses ebx edi esi hWnd,uMsg,wParam,lParam
 								invoke	DefWindowProc,hWnd,uMsg,wParam,lParam
 								ret
 						.endif
-						;å³é”®æ—¶å¼¹å‡ºèœå•
+						;ÓÒ¼üÊ±µ¯³ö²Ëµ¥
 				.elseif eax == WM_RBUTTONDOWN
 						invoke	GetCursorPos,addr @stPos
 						invoke	TrackPopupMenu,hSubMenu,TPM_LEFTALIGN,\
@@ -134,7 +134,7 @@ _WinMain				proc
 						invoke	LoadAccelerators,hInstance,IDR_ACCELERATOR1
 						mov		@hAccelerator,eax
 						
-						;æ³¨å†Œçª—å£ç±»
+						;×¢²á´°¿ÚÀà
 						invoke	RtlZeroMemory,addr @stWndClass,sizeof @stWndClass
 						invoke	LoadIcon,hInstance,IDI_ICON1
 						mov		@stWndClass.hIcon,eax
@@ -148,7 +148,7 @@ _WinMain				proc
 						mov		@stWndClass.lpszClassName,offset szClassName
 						invoke	RegisterClassEx,addr @stWndClass
 						
-						;å»ºç«‹å¹¶æ˜¾ç¤ºçª—å£
+						;½¨Á¢²¢ÏÔÊ¾´°¿Ú
 						invoke  CreateWindowEx,WS_EX_CLIENTEDGE,\
 									offset szClassName,offset szCaptionMain,\
 									WS_OVERLAPPEDWINDOW,\
@@ -158,7 +158,7 @@ _WinMain				proc
 						invoke	ShowWindow,hWinMain,SW_SHOWNORMAL
 						invoke	UpdateWindow,hWinMain
 						
-						;æ¶ˆæ¯å¾ªç¯
+						;ÏûÏ¢Ñ­»·
 						.while	TRUE
 								invoke	GetMessage,addr @stMSG,NULL,0,0
 								.break	.if	eax == 0
